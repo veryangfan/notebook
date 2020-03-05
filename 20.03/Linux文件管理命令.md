@@ -41,10 +41,14 @@ grep的一些正则用法
 `-f` Archive filename. 目标名称  
 `-x` Extract files. 解压文件  
 
-- zip  
+- zip
+
 `zip archive-name.zip -r diractory-name/*`压缩(`-r` 文件目录下的所有文件及其子目录)  
 `uzip archive-name.zip` 解压
 
-- wget  
-`wget URL` 下载一个文件
+- wget
+  
+`wget URL` 下载一个文件  
+`wget URL -O filename.tar.gz` 下载一个文件并且重新命名
+
 
