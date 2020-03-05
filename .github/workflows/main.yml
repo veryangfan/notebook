@@ -1,0 +1,37 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node.js
+      uses: actions/setup-node@v1
+    - name: npm install
+      run: 
+        npm i -g github-markdown
+        npm install
+        npm run build --if-present
+        npm test
+    - name: Run bootstrap shell
+      run: bash ./bootstrap.sh 
+    - name: Delete .git
+      run: rm -rf .git
+    - name: Delete .github
+      run: rm -rf .github
+    - name: Git init
+      run: git init
+    - name: Config git user name
+      run: git config --global user.name "yangfan"
+    - name: Config git user email
+      run: git config --global user.email "veryangfan@qq.com"
+    - name: Add current directory
+      run: git add .
+    - name: Git commit
+      run: git commit -m "update notebook"
+    - name: Git push
+      run: git push --force https://${{ secrets.TOKEN }}@github.com/veryangfan/veryangfan.github.io.git master
