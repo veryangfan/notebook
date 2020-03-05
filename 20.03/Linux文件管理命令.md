@@ -30,7 +30,21 @@ grep的一些正则用法
 `grep g..d file.txt` g和d之间有两个字母 如good  
 `grep aaa* file.txt` 至少有两个a  
 
+- tar
 
+`tar -zcvf archive-name.tar.gz diractory-name` 压缩  
+`tar -zxvf filename.tar.gz` 解压缩  
 
+`-z` Compress archive using gzip program. 使用gzip算法进行压缩与解压  
+`-c` Create archive. 创建压缩文件  
+`-v` Verbose display while create archive. 显示长的过程  
+`-f` Archive filename. 目标名称  
+`-x` Extract files. 解压文件  
 
+- zip  
+`zip archive-name.zip -r diractory-name/*`压缩(`-r` 文件目录下的所有文件及其子目录)  
+`uzip archive-name.zip` 解压
+
+- wget  
+`wget URL` 下载一个文件
 
