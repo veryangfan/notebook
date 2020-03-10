@@ -26,7 +26,9 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
 ```
 
 #### ping（网络层ICMP协议）
-测试网络连通性
+测试网络连通性  
+原理：ping基于ICMP协议实现，本机创建一个数据包发送给目标IP，目标接收后返回给本机一个完全一样的数据包  
+TTL(time to live)：存活时间，TTL是IP数据包在计算机网络中可以转发的最大跳数,每次经过一个路由器，路由器会修改TTL，将TTL的值减一，然后再将数据包转发出去。如果在到达目标ip之前，TTL的值已经为0,数据包就会被丢弃
 ```bash
 [root@ecs-s6-medium-2-linux-20200211093034 ~]# ping www.baidu.com
 PING www.a.shifen.com (61.135.169.125) 56(84) bytes of data.
