@@ -178,7 +178,7 @@ SRANDMEMBER key count //随机获取多个元素
 #### 取值与赋值
 ```bash
 ZADD key score member
-//添加数据
+//添加数据，存入后会自动按照从小到大排序
 redis>ZADD scoreboard 89 Tom 67 Peter 100 David
 "3"
 //修改数据
