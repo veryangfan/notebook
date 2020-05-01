@@ -37,7 +37,6 @@ Bean 的生命周期概括起来就是 4 个阶段：
   而`@Autowired`是`Spring`提供的关键字。
 2. @Autowired是byType的;
   @Resourse关键字是byName的,如果存在多个同样类型的Bean，就会报出BeanCreationException的错误，要解决这个问题,使用@Qualifier关键字，@Qualifier(***)来让Spring根据Bean的名称来进行装配。
-3. 
 
 ## SpringMVC的执行流程？
 
