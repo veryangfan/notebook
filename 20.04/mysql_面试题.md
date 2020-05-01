@@ -1,6 +1,7 @@
 # MySQL面试题目整理
 
 # MyISAM和InnoDB
+>两种常见的存储引擎，是表级别的，形容某一张表的
 1. InnoDB支持`事物`，而MyISAM不支持事物
 2. InnoDB支持`行级锁`，而MyISAM支持`表级锁`
 3. InnoDB支持`外键`，而MyISAM不支持
