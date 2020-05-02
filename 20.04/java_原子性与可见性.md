@@ -19,13 +19,18 @@ volatile保证了可见性，但不保证原子性。比如计算一个数值，
 
 所以引入了CAS操作，CAS即Compare and Swap，比较和交换。它是JDK提供的非阻塞原子性操作，通过硬件保证了 比较-更新 操作的原子性。
 
+### AtomicLong
+`AtomicLong`就是基于CAS实现的，CAS的主要实现方式就是JDK提供的Unsafe类，Unsafe类中的方法都是native的方法。
 
-AtomicLong就是基于CAS实现的。
+AtomicLong是原子性递增或者递减类，主要函数包括`incrementAndGet`（等价于线程安全的`++i`），`decrementAndGet`(`--i`)，`getAndIncrement`(`i++`)，`getAndDecrement`(`i--`)，内部是使用Unsafe类实现的  
 
+### LongAdder
+JDK8新增了原子操作类`LongAdder`。由于AtomicLong在高并发的条件下会同时竞争更新同一个原子变量，导致CAS操作失败后，会无限自旋尝试CAS，浪费CPU资源。`LongAdder`的解决方案是在内部维护一个延迟初始化的原子性更新数组（默认情况下Cell数组是null）和一个基值变量base。并发线程数少的时候，累加操作针对base进行；并发量大的时候，初始化Cell数组为2（动态扩容，不够时扩大为2倍，复制原Cell数组到新扩容数组，剩下空着的设为null），每个Cell里面有一个初始值为0的long型变量，多个线程在争夺一个Cell变量失败时，可以在其他Cell上尝试CAS操作，这样就可以提升性能。  
+`longValue()``sum()`：返回当前值，内部操作是累加所有Cell内部的value值再累加base
 
 ## 有序性
 
-Java内存模型允许编译器和处理器，对指令重新排序以提高性能。单线程下指令重排并不会影响程序的最终执行结果。但多线程下是会存在问题的。
+Java内存模型允许编译器和处理器，对指令重新排序以提高性能。单线程下`指令重排`并不会影响程序的最终执行结果。但多线程下是会存在问题的。
 
 volatile关键字除了解决可见性的问题，还可以解决有序性的问题。变量使用volatile修饰时有序规则：  
 - 写volatile变量时，可以保证写之前的操作，不会排序到写之后；
