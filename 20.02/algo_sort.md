@@ -25,7 +25,7 @@ public class QuickSort{
         quickSort(arr, i+1, right); //重复这个过程
     }
 
-	public static void swap(int[] arr, int i, int j) {
+    public static void swap(int[] arr, int i, int j) {
 		int tmp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = tmp;

@@ -5,6 +5,7 @@
 # 可见性
 java内存模型规定，将java的内存分为主内存和工作内存。所有的变量都放在主内存中，当线程使用变量时，会把主内存中的变量复制到工作内存中，然后对工作内存中的变量进行处理，处理完后更新到主内存。  
 由此出现了内存不可见的问题。
+![java内存模型](https://note.obs.cn-north-4.myhuaweicloud.com/java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg)
 
 ## volatile关键字
 加锁是可以保证内存的可见性的，因为加锁和释放锁的内存语义就是，当获取锁时，先清空工作内存中的变量，直接去主内存中获取；在释放锁时，将本地内存中修改的变量刷新回主内存中。
@@ -25,12 +26,14 @@ volatile保证了可见性，但不保证原子性。比如计算一个数值，
 AtomicLong是原子性递增或者递减类，主要函数包括`incrementAndGet`（等价于线程安全的`++i`），`decrementAndGet`(`--i`)，`getAndIncrement`(`i++`)，`getAndDecrement`(`i--`)，内部是使用Unsafe类实现的  
 
 ### LongAdder
+
+![LongAdder](https://note.obs.cn-north-4.myhuaweicloud.com/longadder.png.jpg)
 JDK8新增了原子操作类`LongAdder`。由于AtomicLong在高并发的条件下会同时竞争更新同一个原子变量，导致CAS操作失败后，会无限自旋尝试CAS，浪费CPU资源。`LongAdder`的解决方案是在内部维护一个延迟初始化的原子性更新数组（默认情况下Cell数组是null）和一个基值变量base。并发线程数少的时候，累加操作针对base进行；并发量大的时候，初始化Cell数组为2（动态扩容，不够时扩大为2倍，复制原Cell数组到新扩容数组，剩下空着的设为null），每个Cell里面有一个初始值为0的long型变量，多个线程在争夺一个Cell变量失败时，可以在其他Cell上尝试CAS操作，这样就可以提升性能。  
-`longValue()``sum()`：返回当前值，内部操作是累加所有Cell内部的value值再累加base
+`longValue()`、`sum()`：返回当前值，内部操作是累加所有Cell内部的value值再累加base
 
 ## 有序性
 
-Java内存模型允许编译器和处理器，对指令重新排序以提高性能。单线程下`指令重排`并不会影响程序的最终执行结果。但多线程下是会存在问题的。
+Java内存模型允许编译器和处理器，对指令重新排序以提高性能。单线程下`指令重排`并不会影响程序的最终执行结果。但多线程下是会存在问题的。  
 
 volatile关键字除了解决可见性的问题，还可以解决有序性的问题。变量使用volatile修饰时有序规则：  
 - 写volatile变量时，可以保证写之前的操作，不会排序到写之后；
