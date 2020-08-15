@@ -85,43 +85,68 @@ Class client{
 
 ## 5.单例模式 
 
-懒汉式：需要我再new
+1)饿汉式：不管你需不需要，new了再说
+缺点：浪费空间
 ```java
-//线程不安全版本
 public class Singleton {  
-    private static Singleton instance;  
+    private static Singleton instance = new Singleton(); //直接new 
     private Singleton (){}  
-  
     public static Singleton getInstance() {  
-    if (instance == null) {  
-        instance = new Singleton();  
-    }  
-    return instance;  
+        return instance;  
     }  
 }
+```
 
+2)懒汉式：我比较懒，你需要我再new
+缺点：每次调用`getInstance()`都需要加锁，影响性能
+```java
 //线程安全版本,加锁
 public class Singleton {  
-    private static Singleton instance;  
+    private static Singleton instance;//只声明，不new  
     private Singleton (){}  
     public static synchronized Singleton getInstance() {  
-    if (instance == null) {  
-        instance = new Singleton();  
-    }  
-    return instance;  
+        if (instance == null) {  
+            instance = new Singleton();  
+        }  
+        return instance;  
     }  
 }
-
 ```
-
-饿汉式：不管你需不需要，new了再说
+3)静态内部类：静态内部类在JVM中是唯一的，可以保证单例对象的唯一性
 ```java
-public class Singleton {  
-    private static Singleton instance = new Singleton();  
-    private Singleton (){}  
-    public static Singleton getInstance() {  
-    return instance;  
-    }  
+public class Singleton{
+    private static class SingletonHolder{
+        private static final Singleton INSTANCE = new Singleton;
+    }
+    private Singleton(){}
+    public static final Singleton getInstance(){
+        return SingletonHolder.Instance;
+    }
 }
 ```
+
+4)双重校验锁: 双锁模式在懒汉式的基础上做了优化，给静态对象的定义加上volatile来保证初始化对象的唯一性，在获取对象时通过`syschronized(Singleton.class)`来给单例类加锁，保证操作的唯一性
+```java
+public class Singleton {
+    //保证可见性和指令重排
+    private volatile static Singleton instance; //1.对象锁
+    //私有构造函数
+    private Singleton(){}
+    public static Singleton getInstance(){
+        //第一重检查，可以避免每次调用都需要加锁
+        if(instance == null){
+            //同步锁定代码块
+            synchronized (Singleton.class){ //2.synchronized方法锁
+                //第二重检查
+                if(instance == null){
+                    //注意：非原子操作
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
 

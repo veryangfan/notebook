@@ -8,14 +8,58 @@ Java提供了两种类型的锁，来控制多个线程对于共享资源的访�
 将对象作为锁，对象头里面具有锁的标志位
 
 ### 用法
-1）用于同步一个代码块  
-2）用于同步一个普通方法  
-3）用于同步一个静态方法  
-4）用于同步一个类  
-
+1）用于同步一个代码块，制定一个加锁的对象，比如给当前对象加锁
+```java
+public void func() {
+    synchronized (this) {
+        // ...
+    }
+}  
+```
+2）用于同步一个普通方法
+```java
+public synchronized void func () {
+    // ...
+}
+```
+3）用于同步一个静态方法
+```java
+public synchronized static void fun() {
+    // ...
+}
+```  
+4）用于同步一个类，给当前类的Class对象加锁
+```java
+public void func() {
+    synchronized (SynchronizedExample.class) {
+        // ...
+    }
+}
+```  
 1和2其实没有本质区别，都是只能作用于同一个对象  
 3是作用于整个类，可以作用于多个对象，方法不管有多少个类实例，同时只有一个线程能获取锁进入这个方法。  
-4因为将整个类都同步了，所以可以作用于多个对象 
+4因为将整个类都同步了，所以可以作用于多个对象
+
+总结一下：也就是说1和2是只作用于同一个对象的，如果两个线程调用两个对象上的同步代码块，就不会进行同步。  
+而3和4是作用在类上的，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步。
+我们考虑单例模式的问题：这里就需要同步整个`Singleton`类，因为两个线程获取两个对象时，也需要进行同步竞争锁，从而才能保证返回一个单例对象。
+```java
+//单例模式
+class Singleton{
+	private volatile static final Singleton instance;
+	private Singleton(){};
+	public Singleton getInstance(){
+		if(instance == null){
+			synchronized(Singleton.class){
+				if(instance == null){
+					instance = new Singleton();
+				}
+			}
+		}
+		return instance;
+	}
+}
+```
 
 ### synchronized锁的升级
 JDK1.6 之后对synchronized做了一些优化，为了减少获得锁和释放锁带来的性能开销，引入了`偏向锁`、`轻量级锁`的概念。因此在 synchronized 中，锁存在四种状态 分别是：无锁-->偏向锁-->轻量级锁-->重量级锁； 锁的状态根据竞争激烈的程度从低到高不断升级。
