@@ -23,67 +23,70 @@ class ProductFactory{
 }
 ```
 
-## 2. 策略模式（Strategy）
-策略一般指的是算法部分，将策略封装成一个成员变量放入执行类中，在不同的情况下注入不同的策略
-核心思想：将策略（算法）抽象成一个接口，实现这个策略接口生成各种具体策略，从而注入不同的实现类。
-应用场景：ribbon的负载均衡策略的替换（如随机，均匀）；JPA中@Id的生成策略（如递增）
+## 2.工厂模式
+核心思想：在执行过程中的类需要可替换。多态中利用接口可以实现类传入类的可替换。比如我们有一个接口，有一个函数接收这个接口类型的参数。这样我们写这个函数的程序，并不需要已经写好具体实现接口的类。只在调用的时候传入合适的类即可。  
+**工厂模式**则是这种思路的延续，只不过传入参数不是产品类，而是工厂类，到里面运行create函数拿到具体类。这样做效果和原来一样。不过工厂不一定只生产一种产品，也就是说可能有createProduct1,2,3,4等等方法。  
+实例：spring的FactoryBean
 ```java
-//策略Strategy API
-public interface Stratery{
-    public abstract void Algorithm();
-}
-```
-```java
-//具体策略 ConcreteStrategy
-class ConcreteStrategyA implements Stratery{
-    @override
-    public void Algorithm(){
-        System.out.println("algorithm A implements");
-    }
+//抽象产品
+public interface Product {
+    String productName();
 }
 
-class ConcreteStrategyB implements Stratery{
+//具体产品1
+public class ConcreteProduct1 implements Product {
+
     @Override
-    public void Algorithm(){
-        System.out.println("algorithm B implements");
+    public String productName() {
+        return "This is ConcreteProduct1";
+    }
+}
+
+//具体产品2
+public class ConcreteProduct2 implements Product {
+
+    @Override
+    public String productName() {
+        return "This is ConcreteProduct2";
+    }
+}
+
+//抽象工厂
+public interface Factory {
+    Product CreateProduct(String name);
+}
+
+//具体工厂
+public class ConcreteFactory1 implements Factory{
+
+    @Override
+    public Product CreateProduct(String name) {
+        if("ConcreteProduct1".equals(name)){
+            return new ConcreteProduct1();
+        }else if("ConcreteProduct2".equals(name)){
+            return new ConcreteProduct2();
+        }else {
+            return null;
+        }
+    }
+}
+
+//for test
+public class Main {
+    public static void main(String[] args) {
+        Factory factory = new ConcreteFactory1();
+        Product concreteProduct1 = factory.CreateProduct("ConcreteProduct1");
+        Product concreteProduct2 = factory.CreateProduct("ConcreteProduct2");
+        System.out.println(concreteProduct1.productName());
+        System.out.println(concreteProduct2.productName());
     }
 }
 ```
-```java
-//上下文Context
-class Context{
-    Strategy strategy;
+## 3.抽象工厂
 
-    public Context(Strategy strategy){
-        this.strategy = strategy;
-    }
+进一步抽象，就是再建工厂的问题
 
-    public void ContextAlgorithm(){
-        strategy.Algorithm();
-    }
-
-}
-```
-```java
-//客户端
-Class client{
-    public static void main(String[] args){
-        Context context;
-
-        context = new Context(Strategy StrategyA);
-        context.ContextAlgorithm();
-        
-        context = new Context(Strategy StrategyB);
-        context.ContextAlgorithm();
-    }
-}
-```
-
-## 3.代理模式
-
-## 4.工厂模式 
-
-## 5.单例模式 
+## 4.单例模式 
 
 1)饿汉式：不管你需不需要，new了再说
 缺点：浪费空间
@@ -148,5 +151,63 @@ public class Singleton {
     }
 }
 ```
+
+## 5. 策略模式（Strategy）
+策略一般指的是算法部分，将策略封装成一个成员变量放入执行类中，在不同的情况下注入不同的策略  
+核心思想：将策略（算法）抽象成一个接口，实现这个策略接口生成各种具体策略，从而注入不同的实现类。  
+应用场景：ribbon的负载均衡策略的替换（如随机，均匀）；JPA中@Id的生成策略（如递增）  
+```java
+//策略Strategy API
+public interface Stratery{
+    public abstract void Algorithm();
+}
+```
+```java
+//具体策略 ConcreteStrategy
+class ConcreteStrategyA implements Stratery{
+    @override
+    public void Algorithm(){
+        System.out.println("algorithm A implements");
+    }
+}
+
+class ConcreteStrategyB implements Stratery{
+    @Override
+    public void Algorithm(){
+        System.out.println("algorithm B implements");
+    }
+}
+```
+```java
+//上下文Context
+class Context{
+    Strategy strategy;
+
+    public Context(Strategy strategy){
+        this.strategy = strategy;
+    }
+
+    public void ContextAlgorithm(){
+        strategy.Algorithm();
+    }
+
+}
+```
+```java
+//客户端
+Class client{
+    public static void main(String[] args){
+        Context context;
+
+        context = new Context(Strategy StrategyA);
+        context.ContextAlgorithm();
+        
+        context = new Context(Strategy StrategyB);
+        context.ContextAlgorithm();
+    }
+}
+```
+
+## 6.代理模式
 
 
