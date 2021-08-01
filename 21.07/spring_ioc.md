@@ -1,6 +1,6 @@
 # Spring IoC
 
-<!-- TOC -->
+主要记录一直以来都没学明白的一些问题
 
 - [Spring IoC](#spring-ioc)
     - [声明Bean](#%E5%A3%B0%E6%98%8Ebean)
@@ -16,9 +16,6 @@
             - [@Autowired和@Resourse](#autowired%E5%92%8Cresourse)
     - [其他常用注解](#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3)
 
-<!-- /TOC -->
-
-主要记录一直以来都没学明白的一些问题
 
 ## 声明Bean
 
