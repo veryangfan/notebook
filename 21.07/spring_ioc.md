@@ -1,6 +1,22 @@
 # Spring IoC
 
-[toc]
+<!-- TOC -->
+
+- [Spring IoC](#spring-ioc)
+    - [声明Bean](#%E5%A3%B0%E6%98%8Ebean)
+        - [xml](#xml)
+        - [注解](#%E6%B3%A8%E8%A7%A3)
+            - [命名空间](#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4)
+        - [Java Bean](#java-bean)
+    - [注入](#%E6%B3%A8%E5%85%A5)
+        - [属性（property）注入](#%E5%B1%9E%E6%80%A7property%E6%B3%A8%E5%85%A5)
+        - [构造方法（constructor）注入](#%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95constructor%E6%B3%A8%E5%85%A5)
+        - [工厂注入](#%E5%B7%A5%E5%8E%82%E6%B3%A8%E5%85%A5)
+        - [自动注入](#%E8%87%AA%E5%8A%A8%E6%B3%A8%E5%85%A5)
+            - [@Autowired和@Resourse](#autowired%E5%92%8Cresourse)
+    - [其他常用注解](#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3)
+
+<!-- /TOC -->
 
 主要记录一直以来都没学明白的一些问题
 
@@ -11,7 +27,8 @@
 **其实并不需要理解Bean是什么**，只要知道它是Spring实现自动注入生成对象过程中，必须使用的一个**组件**，这样就可以了。Spring在实例化对象的时候，不止需要一个类，还需要将这个类配置为Bean才可以，通常情况下Spring容器中管理着许多Bean。
 
 将类配置为Bean通常有三种方式: xml、注解、Java Bean
-### 1. xml
+
+### xml
 
 xml是比较早的配置方式，其灵活且复杂，下面配置了两个Bean。
 
@@ -27,7 +44,7 @@ xml是比较早的配置方式，其灵活且复杂，下面配置了两个Bean�
 </beans>
 ```
 
-### 2. 注解
+### 注解
 
 >我们都在微博上@过某某，对方会优先看到这条信息，并给你反馈，那么在Spring中，你标识一个@符号，那么Spring就会来看看，并且从这里拿到一个Bean（注册）或者给出一个Bean（使用）
 
@@ -98,7 +115,7 @@ public class BeanTestApplication {
 
 ps: SpringBoot默认会扫描基类包里的所有类
 
-### 3. Java Bean
+### Java Bean
 
 JavaBean的配置方式也是采用两个注解，即`@Configuration`和`@Bean`.
 
