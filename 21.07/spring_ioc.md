@@ -1,5 +1,7 @@
 # Spring IoC
 
+[toc]
+
 主要记录一直以来都没学明白的一些问题
 
 ## 声明Bean
@@ -194,8 +196,8 @@ Spring注入就是将具体信息注入到Bean里，从而生成对象。
 ### 自动注入
 
 使用注解的方式为Bean注入属性值
-- 如果bean依赖于其他bean（比如User依赖Car），那么我们可以使用`@Autowired`或者`@Resource`这两个注解进行依赖注入
-- 如果要为基本数据类型或者是Java的封装类型（比如String）赋值，可以使用@Value注解。
+- 如果Bean依赖于其他Bean（比如User依赖Car），那么我们可以使用`@Autowired`或者`@Resource`这两个注解进行依赖注入
+- 如果要为基本数据类型或者是Java的封装类型（比如String）赋值，可以使用`@Value`注解。
 
 
 #### @Autowired和@Resourse 
@@ -230,12 +232,107 @@ public class UserController {
 
 ```
 
-而@Resourse关键字是`byName`的，即根据名称注入,如果没有在使用`@Resource`时指定Bean的名字，同时Spring容器中又没有该名字的Bean,这时`@Resource`就会退化为`@Autowired`即按照类型注入，这样就有可能违背了使用`@Resource`的初衷。所以建议在使用`@Resource`时都显示指定一下`Bean`的名字`@Resource(name="xxx")`
+而`@Resourse`关键字是`byName`的，即根据名称注入,如果没有在使用`@Resource`时指定Bean的名字，同时Spring容器中又没有该名字的Bean,这时`@Resource`就会退化为`@Autowired`即按照类型注入，这样就有可能违背了使用`@Resource`的初衷。所以建议在使用`@Resource`时都显示指定一下`Bean`的名字`@Resource(name="xxx")`
 
 
+## 其他常用注解
 
+下面再继续介绍一些常用注解
+
+注解|说明
+-|:-
+`@Configration`|Java Config配置文件
+`@Import`|手动将类导入Spring容器，以生成Bean
+`@Conditional`|条件注解，通常作用于方法，方法返回true则生成组件，返回false则不生成
+
+
+1. 首先定义一些Service
+```java
+package com.example.beantest.service;
+//注意：这里没有使用@Service注解
+public class Service1 {
+}
+
+//----------
+package com.example.beantest.service;
+//注意：这里没有使用@Service注解
+public class Service2 {
+}
+
+package com.example.beantest.service;
+//注意：这里没有使用@Service注解
+public class Service3 {
+}
+
+```
+2. 定义配置文件  
+
+```java
+@Configuration  //定义Java Config
+@Import({Service1.class, Service2.class})
+//此处使用@Import注解，将Service1和Service2两个类导入Spring容器（即ApplicationContext），生成Bean
+public class BeanConfig {
+
+    //配置一些SpringBean
+    @Conditional(MyBeanCondition.class)  
+    //MyBeanCondition是条件配置类(见下文3.)，需要继承Condition接口，
+    //重写接口的matches()方法，调用返回true则生成Bean，false则不生成
+    @Bean
+    public Service3 getService3(){
+        return new Service3();
+    }
+}
+```
+
+3. 配置文件MyBeanCondition
+
+```java
+//条件配置，继承Condition接口，重写matches方法
+public class MyBeanCondition implements Condition {
+    @Override
+    public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
+        if(new Random().nextInt(10) >= 5){
+            return true;
+        }
+        return false;
+    }
+}
+```
+
+4. 测试结果
+
+```java
+@SpringBootApplication
+public class BeanTestApplication {
+
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = SpringApplication.run(BeanTestApplication.class, args);
+
+        Service1 service1Bean = context.getBean(Service1.class);
+        System.out.println(service1Bean);
+
+        Service2 service2Bean = context.getBean(Service2.class);
+        System.out.println(service2Bean);
+
+        Service3 service3Bean = context.getBean(Service3.class);
+        System.out.println(service3Bean);
+    }
+}
+```
+结果
+```
+...
+2021-08-01 16:29:30.660  INFO 7912 --- [           main] c.example.beantest.BeanTestApplication   : Started BeanTestApplication in 1.566 seconds (JVM running for 2.566)
+com.example.beantest.service.Service1@5b6e8f77
+com.example.beantest.service.Service2@41a6d121
+Exception in thread "main" org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.example.beantest.service.Service3' available
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:351)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBean(DefaultListableBeanFactory.java:342)
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1172)
+	at com.example.beantest.BeanTestApplication.main(BeanTestApplication.java:22)
+```
 
 
 ---
 
-这部分主要是Spring IoC注解的使用
+这部分主要是Spring IoC注解的使用，
