@@ -209,5 +209,47 @@ Class client{
 ```
 
 ## 6.代理模式
+>2021.08.13更新
+
+代理模式：为主体提供一种代理，以控制对主体的访问
+
+应用场景：HTTP代理(VPN)
+HTTP代理提供高速缓存功能，浏览器(Client)不会每次都去访问Web服务器(RealSubject),而是先去访问HTTP代理(Proxy)缓存的页面。
+
+
+```java
+//主体
+public interface Subject {
+    public void request();
+}
+//真实主体：被代理对象的类
+public class RealSubject implements Subject{
+    @Override
+    public void request() {
+        System.out.println("真实请求");
+    }
+}
+//代理类
+public class Proxy implements Subject{
+
+    RealSubject realSubject; //实例化被代理的对象，一个代理可以代理多个真实主体，只要替换就可以了
+
+    @Override
+    public void request() {
+        if(realSubject == null){
+            realSubject = new RealSubject();
+        }
+        realSubject.request();
+    }
+}
+//Client请求真实主体：通过代理访问对象
+public class Main {
+    public static void main(String[] args) {
+        Proxy proxy = new Proxy(); //代理
+        proxy.request(); //通过代理访问真实主体
+    }
+}
+
+```
 
 
