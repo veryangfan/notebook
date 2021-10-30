@@ -72,7 +72,9 @@ init
 after
 after once
 ```
+
 ### 3. `@SpringBootTest` 搭配 `@Autowired`使用
+
 添加@SpringBootTest注解与@Autowired搭配使用，可以使Service实现自动注入
 ```java
 @SpringBootTest
@@ -96,6 +98,7 @@ public class Test3 {
 ```
 
 ### 4. `@MockBean`，`@SpyBean`搭配规则条件配置，如静态方法`when()`
+
 `@MockBean` 模拟操作，通常应用于涉及到对数据库等操作的测试
 `@SpyBean` 根据配置规则执行，配置了规则就按照规则执行，否则不执行（此时等同于`@MockBean`）规则配置可以使用`when()`等静态方法（`Mockito`）
 
@@ -121,6 +124,7 @@ Expected :2
 Actual   :0
 ```
 - `@SpyBean`  demo
+
 ```java
 import static org.mockito.Mockito.when;  //when方法
 
