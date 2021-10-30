@@ -2,6 +2,7 @@
 - curl命令常用来做http请求。c表示client,url就是URL
 - curl命令在Linux和mac系统下自带，window下建议下载git for windows
 - 下面只是一些常用的参数，更多可以查阅帮助。
+
 ```bash
 # 直接接一个网址
 $ curl https://www.baidu.com
