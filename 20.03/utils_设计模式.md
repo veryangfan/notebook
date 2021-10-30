@@ -286,11 +286,11 @@ public class Main {
 
 将一个复杂的对象的构建，与其表示分离，使得同样的构造过程可以创建不同的表示。
 
-构造者模式通常分为Builder和Build两个部分实现。
+构造者模式通常分为Builder和Build两个部分实现。以构造一个People对象为例：
 
 ```java
 People people = People.builder()
-                .name("Tom")
-                .id("100100199801018888")
+                .name("Tom") //姓名
+                .id("100100199801018888") //身份证id
                 .Build();
 ```
