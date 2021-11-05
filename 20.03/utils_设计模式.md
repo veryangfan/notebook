@@ -294,3 +294,11 @@ People people = People.builder()
                 .id("100100199801018888") //身份证id
                 .Build();
 ```
+
+## 9. 开放-封闭原则
+开放-封闭原则(The Open-Closeed Principle)，简称OCP，或叫开-闭原则。
+> 对于软件实体（类、模块、函数等），应该可以扩展，但是不可修改。
+> "Open for extension,Closed for modification."
+“对于扩展是开放的，对于更改是封闭的。”
+
+这样的设计是为了面对需求的改变，使得系统在第一个版本以后可以不断推出新的版本。
