@@ -34,4 +34,4 @@ jobs:
     - name: Git commit
       run: git commit -m "update notebook"
     - name: Git push
-      run: git push --force https://${{ secrets.TOKEN }}@github.com/veryangfan/veryangfan.github.io.git master
+      run: git push --force https://${{ secrets.GITHUB_TOKEN }}@github.com/veryangfan/veryangfan.github.io.git master
