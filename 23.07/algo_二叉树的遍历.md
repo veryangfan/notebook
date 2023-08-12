@@ -22,7 +22,7 @@ class BinaryTreeTraversal {
         if (root == null) {
             return;
         }
-            System.out.print(root.val + " ");
+        System.out.print(root.val + " ");
         preOrderTraversal(root.left);
         preOrderTraversal(root.right);
     }
@@ -67,7 +67,7 @@ class BinaryTreeTraversal {
         if (root == null) {
             return;
         }
-         Stack<TreeNode> stack = new Stack<>();
+        Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
         while (!stack.isEmpty()) {
             TreeNode node = stack.pop();
