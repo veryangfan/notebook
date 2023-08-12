@@ -129,7 +129,7 @@ class BinaryTreeTraversal {
 
  ```java
 
-class Node {
+class TreeNode {
     int data;
     Node left, right;
      public Node(int item) {
@@ -137,17 +137,17 @@ class Node {
         left = right = null;
     }
 }
- class BinaryTree {
+class BinaryTree {
 
     // 层序遍历
     public void levelOrder(TreeNode root) {
         if (root == null){
             return;
         }
-        Queue<Node> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
-            Node current = queue.poll();
+            TreeNode current = queue.poll();
             System.out.print(current.data + " ");
             if (current.left != null) {
                 queue.add(current.left);
